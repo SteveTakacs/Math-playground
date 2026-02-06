@@ -9,13 +9,8 @@ The Monty Hall problem is a famous probability puzzle based on a game show scena
 The question is: Should you stick with your original choice, switch to the other door, or does it not matter?
 """
 
-"""
-Our Simulation in a nutshell
-1. In the main function we define 10.000 as the number of rounds we want to simulate and call the win_ratios_over_time function. 
-2. THe  call the win_ratios_over_time function is called twice, once for switching and once for sticking.
-3. The win_ratios_over_time function calls the monty_hall_game function for a specified number of rounds. Each round simulates a game of Monty Hall, and we keep track of the number of wins to calculate the win ratio over time.
-4. We print out the ratios and also plot the win ratio over time for the sticking strategy, showing how it converges to the theoretical probability of 1/3 as the number of rounds increases.
-"""
+
+
 
 import random
 import numpy as np
@@ -54,18 +49,32 @@ def win_ratios_over_time(num_rounds: int, switch: bool) -> np.ndarray:
 
     return ratios
 
+"""
+def run_simulations(num_simulations: int, switch: bool) -> float:
+    wins = 0
+    for _ in range(num_simulations):
+        if monty_hall_game(switch):
+            wins += 1
+    return wins / num_simulations
+"""
+
 if __name__ == "__main__":
+
     num_simulations = 10_000
     switch_win_rate = win_ratios_over_time(num_simulations, True)[-1]
     stick_win_rate = win_ratios_over_time(num_simulations, False)[-1]
     print(f"Switching win rate: {switch_win_rate:.2%}")
     print(f"Sticking win rate: {stick_win_rate:.2%}")
 
+
+
+
+
 # More than looking at the number, let's make some plots to visualize the results!
 #For this, you will have to install numpy and matplotlib if you haven't already.
 
 ratios = win_ratios_over_time(num_simulations, False)
-plot_limit = 10000
+plot_limit = 3000
 # Plot how the ratio changes by increasing $n$  
 
 x = np.arange(1, plot_limit + 1)
@@ -81,3 +90,20 @@ plt.ylim(0.1, 0.6)
 plt.legend()
 plt.savefig("monty_hall_stay.png", dpi=200)
 #plt.show()
+
+
+
+
+"""
+x = np.arange(1, plot_limit + 1)  
+y = ratios[:plot_limit]  
+plt.title(r"Win ratio over (n) if we say 'no'")  
+plt.xlabel("n = number of rounds played")  
+plt.ylabel(r"Cumulative win percentage")  
+plt.axhline(y = 1/3, color = 'k', linestyle='--', alpha = 0.6, label = r"Probability of wining")  
+plt.plot(x,y)  
+plt.xlim(-5,plot_limit)  
+plt.ylim(0.1,0.6)  
+plt.legend()  
+plt.show()
+"""
