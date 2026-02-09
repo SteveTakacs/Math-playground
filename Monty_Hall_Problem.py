@@ -11,10 +11,13 @@ The question is: Should you stick with your original choice, switch to the other
 
 """
 Our Simulation in a nutshell
-1. In the main function we define 10.000 as the number of rounds we want to simulate and call the win_ratios_over_time function. 
-2. THe  call the win_ratios_over_time function is called twice, once for switching and once for sticking.
-3. The win_ratios_over_time function calls the monty_hall_game function for a specified number of rounds. Each round simulates a game of Monty Hall, and we keep track of the number of wins to calculate the win ratio over time.
-4. We print out the ratios and also plot the win ratio over time for the sticking strategy, showing how it converges to the theoretical probability of 1/3 as the number of rounds increases.
+In main() we define the number of rounds we play and call win_ratios_over_time (both for switching and sticking) -> In win_ratios_over_time we call monty_hall_game over and over again, keeping track of win and lose rates.
+"""
+
+"""
+The result should confirm one of 2 theories:
+1. There should be a 50-50 chance of winning whether you switch or not (i.e. it doesn't matter if you switch or not) -> We are choosing between 2 doors, what happened earlier doesn't matter.
+2. Each Door has a 1/3 chance at the beginning, so in the separation 1 to 2 you have 33% to have the car and the host has 66% to have the car. The host will have 66% even after revealing a door and therefore the remaining door will have 66% chance to have the car.
 """
 
 import random
