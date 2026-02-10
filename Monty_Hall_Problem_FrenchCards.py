@@ -1,12 +1,8 @@
 """
-Monty_Hall_Problem in a Nushell
+Monty_Hall_Problem in a Nushell, but with the twist of using French Cards instead of doors. 
 
-The Monty Hall problem is a famous probability puzzle based on a game show scenario. The problem is named after Monty Hall, the original host of the television game show "Let's Make a Deal." The puzzle goes as follows:
-1. You are a contestant on a game show, and you are presented with three doors. Behind one door is a car (the prize you want), and behind the other two doors are goats (which you do not want).
-2. You choose one of the three doors, but it is not opened immediately.
-3. The host, Monty Hall, who knows what is behind each door, opens one of the two doors that you did not choose, revealing a goat.
-4. Monty then gives you the option to either stick with your original choice or switch to the other unopened door.
-The question is: Should you stick with your original choice, switch to the other door, or does it not matter?
+The problem is the same, but instead of 3 doors we have 52 cards, one of which is the Ace of Spades (the "car") and the other 51 are "goats". 
+The host will reveal 50 goats and give you the option to switch to the remaining card or stick with your original choice. The question remains: Should you switch or stick?
 """
 
 """
@@ -16,8 +12,10 @@ In main() we define the number of rounds we play and call win_ratios_over_time (
 
 """
 The result should confirm one of 2 theories:
-1. There should be a 50-50 chance of winning whether you switch or not (i.e. it doesn't matter if you switch or not) -> We are choosing between 2 doors, what happened earlier doesn't matter.
-2. Each Door has a 1/3 chance at the beginning, so in the separation 1 to 2 you have 33% to have the car and the host has 66% to have the car. The host will have 66% even after revealing a door and therefore the remaining door will have 66% chance to have the car.
+1. There should be a 50-50 chance of winning whether you switch or not (i.e. it doesn't matter if you switch or not) -> We are choosing between 2 cards, what happened earlier doesn't matter.
+2. Each Card has a 1/52 chance at the beginning, so in the separation 1 to 51 you have 1.92% to have the car and the host has 98.08% to have the car. The host will have 98.08% even after revealing 50 cards and therefore the remaining card will have 98.08 % chance to have the car.
+
+I think we all have a "gut feeling" that it is almost impossible to have picked the right card at the beginning, so we should switch (as the host is "hiding" the card where the car is). Let's see if the numbers confirm this intuition!
 """
 
 import random
@@ -25,25 +23,30 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def monty_hall_game(switch: bool) -> bool:
-    # defining what's behind the doors (0 -> car, 1 -> goat)
-    #The first door has the car, the other two have goats:
-    doors = [0, 1, 1]
-    #We shuffle the doors to randomize their positions:
-    random.shuffle(doors)
+    # defining what's behind the cards (0 -> car, 1 -> goat)
+    #The first card has the car, the other 51 have goats:
+    cards = [0] + [1] * 51
+    #We shuffle the cards to randomize their positions:
+    random.shuffle(cards)
 
-    # Player get's to choose a door of her liking
-    choice = random.randint(0, 2)
+    # Player get's to choose a card of her liking
+    choice = random.randint(0, 51)
 
-    # Host reveals a door that has a goat behind it
-    eligible = [i for i in range(3) if i != choice and doors[i] == 1]
-    host_reveal = random.choice(eligible)
+    # Host keeps exactly ONE other card closed
+    if cards[choice] == 0:
+        # player picked the car -> host keeps a random goat card closed
+        remaining = [i for i in range(52) if i != choice and cards[i] == 1]
+        other_card = random.choice(remaining)
+    else:
+        # player picked a goat -> host must keep the car card closed
+        other_card = cards.index(0)
 
-    # If the player decides to switch, she picks the remaining door
+    # If the player decides to switch, she picks the remaining card
     if switch:
-        choice = next(i for i in range(3) if i != choice and i != host_reveal)
+        choice = other_card
 
-    # Win if chosen door has the car
-    return doors[choice] == 0
+    # Win if chosen card has the car
+    return cards[choice] == 0
 
 
 def win_ratios_over_time(num_rounds: int, switch: bool) -> np.ndarray:
@@ -77,10 +80,10 @@ y = ratios[:plot_limit]
 plt.title("Win ratio over n if we stay (no switch)")
 plt.xlabel("n = number of rounds played")
 plt.ylabel("Cumulative win percentage")
-plt.axhline(y=1/3, linestyle="--", alpha=0.6, label="Theoretical 1/3")
+plt.axhline(y=1/52, linestyle="--", alpha=0.6, label="Theoretical 1/52")
 plt.plot(x, y)
 plt.xlim(1, plot_limit)
-plt.ylim(0.1, 0.6)
+plt.ylim(0.01, 0.1)
 plt.legend()
-plt.savefig("monty_hall_stay.png", dpi=200)
+plt.savefig("monty_hall_stay_FrenchCards.png", dpi=200)
 #plt.show()
