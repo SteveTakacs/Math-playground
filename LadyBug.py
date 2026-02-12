@@ -22,50 +22,43 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 
-def match() -> bool:
-    #Player 1 is the player who starts serving.
-    pointsOfPlayer1 = 0
-    pointsOfPlayer2 = 0
+def one_full_round_the_clock() -> int:
+    #Clock markings from 1 to 12.
+    visited_markings = [1] + [0] * 11 # Start at marking 12 current_marking = 12 visited_mark
+    current_marking = 12
+    last_marking = 0
 
-    currentServer = True # True for Player 1, False for Player 2
-
-    # Simulate a match until one player reaches 11 points
-
-    while (pointsOfPlayer1 < 11 and pointsOfPlayer2 < 11) and (abs(pointsOfPlayer1 - pointsOfPlayer2) < 2):
+    #A Full round is when the ladybug has visited all markings at least once.
+    #If there is a marking with 0, it means that the ladybug has not visited it yet, and we need to keep simulating.
+    while ((np.array(visited_markings) == 0).any()):
         # Simulate a point
-        if currentServer:  # Player 1 is serving
-            if random.random() < 0.55:  # Server wins the point
-                pointsOfPlayer1 += 1
-            else:  # Receiver wins the point
-                pointsOfPlayer2 += 1
-                currentServer = False  # Switch server
-        else:
-            if random.random() < 0.55:  # Server wins the point
-                pointsOfPlayer2 += 1
-            else:  # Receiver wins the point
-                pointsOfPlayer1 += 1
-                currentServer = True  # Switch server
+        if current_marking == 12:
+            if random.random() < 0.5:  # 50% chance to move clockwise
+                current_marking = 1
+                visited_markings[1] = 1
+            else:  # 50% chance to move counter-clockwise
+                current_marking = 11
+                visited_markings[1] = 11
 
-    if pointsOfPlayer1 > pointsOfPlayer2:
-        return True  # Player 1 wins
-    else:
-        return False  # Player 2 wins
 
-def win_ratios_over_time(num_rounds: int) -> np.ndarray:
+    return last_marking            
+            
+            
+            
+
+
+def distributions_over_time(num_rounds: int) -> np.ndarray:
     wins = 0
     ratios = np.zeros(num_rounds, dtype=float)
 
     for t in range(num_rounds):
-        if match():
-            wins += 1
-        ratios[t] = wins / (t + 1)
-
+        ratios[t] = one_full_round_the_clock()
     return ratios
 
 if __name__ == "__main__":
     num_simulations = 10_000
-    win_rate = win_ratios_over_time(num_simulations)[-1]
-    print(f"Starters win rate: {win_rate:.2%}")
+    distritbutions = distributions_over_time(num_simulations)
+    print(f"Starters win rate: {distritbutions:.2%}")
 
 # More than looking at the number, let's make some plots to visualize the results!
 #For this, you will have to install numpy and matplotlib if you haven't already.
