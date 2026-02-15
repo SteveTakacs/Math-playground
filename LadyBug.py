@@ -1,5 +1,5 @@
 """
-Let's assume, we have an old wall clock, with marings between 1 and 12. 
+Let's assume, we have an old wall clock, with markings between 1 and 12. 
 Let's also assume that we have a ladybug on the clock, and that the ladybug can only move to the next marking in a clockwise or counter-clockwise direction with 50-50% chance.
 
 Now let's follow the movements of the ladybug! Whenever the ladybug reaches a marking, let's color that marking to know that the ladybug has been there.
@@ -7,6 +7,8 @@ The questions we want to answer is: What is the percentage for each marking to b
 The ladybug starts at marking 12, so 6 is the furthest away and from 12 it can move to either 1 or 11 with equal probability.
 
 An example for ladybug movements: 12 -> 1 -> 2 -> 1 -> 12 -> 11 -> 10 -> 9 -> 8 -> 9 -> 8 -> ...
+
+A very good explanation of the problem can be found in this video: https://www.youtube.com/shorts/t3jZ2xGOvYg
 """
 
 """
@@ -82,7 +84,7 @@ if __name__ == "__main__":
     markings = np.arange(1, 13)
 
     plt.figure()
-    plt.bar(markings, distritbutions, color="skyblue", edgecolor="black")
+    plt.bar(markings-1, distritbutions, color="skyblue", edgecolor="black")
     plt.xlabel("Clock Marking")
     plt.ylabel("Probability of Being Last Visited")
     plt.title("Ladybug – Probability of Each Marking Being Last")
@@ -91,24 +93,3 @@ if __name__ == "__main__":
 
     plt.savefig("Ladybug_Distribution.png", dpi=300)
     print("Diagram saved as Ladybug_Distribution.png")
-
-"""
-ratios = win_ratios_over_time(num_simulations)
-plot_limit = 10000
-# Plot how the ratio changes by increasing $n$  
-
-x = np.arange(1, plot_limit + 1)
-y = ratios[:plot_limit]
-
-plt.title("Win ratio for the player who serves first in a squash match")
-plt.xlabel("n = number of rounds played")
-plt.ylabel("Cumulative win percentage")
-plt.axhline(y=0.55, linestyle="--", alpha=0.6, label="Theoretical 55% win rate")
-plt.axhline(y=0.50, linestyle="--", alpha=0.3, color="gray", label="50% win rate")
-plt.plot(x, y)
-plt.xlim(1, plot_limit)
-plt.ylim(0.1, 0.6)
-plt.legend()
-plt.savefig("SquashServe.png", dpi=200)
-#plt.show()
-"""
