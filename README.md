@@ -24,3 +24,4 @@ The ladybug starts at marking 12, so 6 is the furthest away and from 12 it can m
 An example for ladybug movements: 12 -> 1 -> 2 -> 1 -> 12 -> 11 -> 10 -> 9 -> 8 -> 9 -> 8 -> ...
 
 A very good explanation of the problem can be found in this video: https://www.youtube.com/shorts/t3jZ2xGOvYg
+Also a solution to the problem can be found in this video: https://www.youtube.com/shorts/7gG91SZwBoE
